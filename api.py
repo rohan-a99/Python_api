@@ -30,7 +30,7 @@ def giturl():
         fileurl =data["url"]
         project = data["project"]
 
-        filepath = "/workspaces/"+ project+ "/giturl.txt"
+        filepath = "../workspaces/"+ project+ "/giturl.txt"
 
         #dir_list = os.listdir(filepath)
 
@@ -72,18 +72,18 @@ def jarcheck():
     project_name = request.form["project"]
     target_date = request.form["target_date"]
 
-    filepathjar = 'sh ' + project_name + "/simple.sh"
+    filepathjar = 'sh '  + "simple.sh "+project_name
     try:
-        filepath = "/workspaces/"+ project_name+ "/.versioncheck"
+        filepath = "../workspaces/"+ project_name+ "/.versioncheck"
         
         
         if Path(filepath).exists(): 
-            fileurl.save(os.path.join(app.root_path,project_name, secure_filename("com.simplifyQA.Agent.jar")))
+            fileurl.save(os.path.join(app.root_path,"../workspaces/"+project_name+"/libs", secure_filename("com.simplifyQA.Agent.jar")))
             os.popen(filepathjar)
             
             resp={"status":"jar file got updated"}
         else:
-            fileurl.save(os.path.join(app.root_path,project_name, secure_filename("com.simplifyQA.Agent.jar")))
+            fileurl.save(os.path.join(app.root_path,"../workspaces/"+project_name+"/libs", secure_filename("com.simplifyQA.Agent.jar")))
             
             os.popen(filepathjar)
             resp={"status":"jar file got updated"}
@@ -110,7 +110,7 @@ def version():
     target_date = data["target_date"]
 
     try:
-        filepath = filepath = "/workspaces/"+ project+ "/.version" 
+        filepath = filepath = "../workspaces/"+ project+ "/.version" 
         
         
         if Path(filepath).exists(): 
@@ -150,4 +150,4 @@ def version():
 
 if __name__ == "__main__":
     #nos = []
-    app.run(host ='0.0.0.0', port = 5001,debug=True)
+    app.run(host ='0.0.0.0', port = 19010,debug=True)
