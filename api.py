@@ -29,7 +29,7 @@ def giturl():
 
         fileurl =data["url"]
         project = data["project"]
-
+        
         filepath = "../workspaces/"+ project+ "/giturl.txt"
 
         #dir_list = os.listdir(filepath)
@@ -38,20 +38,28 @@ def giturl():
             content = open(filepath, "r")
             check_url=content.read()
             
+            filepathjar = 'sh '  + "publish.sh "+project + " " + check_url
 
             if(check_url == fileurl):
                 resp={"status":False}
 
             else:
+                os.popen(filepathjar)
+                print("git url updated")
                 f = open(filepath, "w")
                 f.write(fileurl)
                 f.close()
+                
                 resp={"status":True}
 
         else:
+            filepathjar = 'sh '  + "publish.sh "+project + " " + fileurl
+            os.popen(filepathjar)
+            print("git url updated")
             f = open(filepath, "w+")
             f.write(fileurl)
             f.close()
+            
             resp={"status":True}
         
         return resp
@@ -80,7 +88,6 @@ def jarcheck():
         if Path(filepath).exists(): 
             fileurl.save(os.path.join(app.root_path,"../workspaces/"+project_name+"/libs", secure_filename("com.simplifyQA.Agent.jar")))
             os.popen(filepathjar)
-            
             resp={"status":"jar file got updated"}
         else:
             fileurl.save(os.path.join(app.root_path,"../workspaces/"+project_name+"/libs", secure_filename("com.simplifyQA.Agent.jar")))
