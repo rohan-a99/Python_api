@@ -1,4 +1,4 @@
 #!bin/bash
 cd /
-cd workspaces/$1
-gradle build --refresh-dependencies
+cd $1
+mvn install -X
