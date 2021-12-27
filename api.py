@@ -30,7 +30,7 @@ def giturl():
         fileurl =data["url"]
         project = data["project"]
         
-        filepath = project+ "/giturl.txt"
+        filepath = "../" + project+ "/giturl.txt"
 
         #dir_list = os.listdir(filepath)
 
@@ -82,7 +82,7 @@ def jarcheck():
 
     filepathjar = 'sh '  + "simple.sh "+project_name
     try:
-        filepath =  project_name+ "/.versioncheck"
+        filepath =  "../" + project_name+ "/.versioncheck"
         
         
         if Path(filepath).exists(): 
@@ -117,7 +117,7 @@ def version():
     target_date = data["target_date"]
 
     try:
-        filepath = filepath = project+ "/.version" 
+        filepath ="../" + project+ "/.version" 
         
         
         if Path(filepath).exists(): 
