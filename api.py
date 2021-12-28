@@ -1,3 +1,4 @@
+import shutil
 import sys
 import os
 from flask import Flask, jsonify, request,Response
@@ -28,9 +29,10 @@ def giturl():
 
 
         fileurl =data["url"]
-        project = data["project"]
+        project1 = data["project"]
+        project=str(project1.replace(" ",""))
         
-        filepath = "../" + project+ "/giturl.txt"
+        filepath = "../workspaces/" + project+ "/giturl.txt"
 
         #dir_list = os.listdir(filepath)
 
@@ -77,12 +79,13 @@ def jarcheck():
     print("got jar check api request")
 
     fileurl =request.files["demo"]
-    project_name = request.form["project"]
+    project_name2 = request.form["project"]
     target_date = request.form["target_date"]
 
+    project_name=str(project_name2.replace(" ",""))
     filepathjar = 'sh '  + "simple.sh "+project_name
     try:
-        filepath =  "../" + project_name+ "/.versioncheck"
+        filepath =  "../workspaces/" + project_name+ "/.versioncheck"
         
         
         if Path(filepath).exists(): 
@@ -113,11 +116,12 @@ def version():
 
     data = request.get_json()
 
-    project =data["project"]
+    project1 =data["project"]
     target_date = data["target_date"]
+    project=str(project1.replace(" ",""))
 
     try:
-        filepath ="../" + project+ "/.version" 
+        filepath ="../workspaces/" + project+ "/.version" 
         
         
         if Path(filepath).exists(): 
@@ -154,6 +158,72 @@ def version():
         return response
 
 
+@app.route('/project', methods=['POST'])
+def project():
+    print("checking if project directory present")
+
+    try:
+        
+        data =request.get_json()
+        url = data["url"]
+        project1 = data["project"]
+        id = data["id"]
+
+        project=str(project1.replace(" ",""))
+
+        build = "chmod +x build.sh\ncd / \ncd bash-files\n./build.sh " +project + "\ncd /\ncd "+ project
+        
+        filepath = r"../workspaces/"
+        filepath2 = r"../workspaces/" + project 
+
+
+        isFile = Path(filepath2).is_dir()
+
+
+        if isFile:
+            # f = open(filepath+"/build.sh", "w")
+            # f.write(build)
+            # f.close()
+            print("Directory already present")
+            response = {
+                    "codeeditor_url":"http:127.0.0.1:7000/#/workspaces/"+project,
+                    "status":"File Already present"
+                }
+            return response
+
+
+        else:
+            shutil.copytree("../CodeEditor", filepath)
+            shutil.move(filepath+"/CodeEditor",filepath2)
+
+            f = open(filepath2+"/build.sh", "w")
+            f.write(build)
+            f.close()
+            
+            command = "./project_creation " + project + " " + url
+
+            os.popen(command) 
+
+            print("project created and pulled successfully...")
+
+
+            response = {
+                    "codeeditor_url":"http:127.0.0.1:7000/#/workspaces/"+project,
+                    "status":"Directory created"
+                }
+
+            return response
+            
+            
+
+        
+    
+    except Exception as e:
+        print(e)
+        response = {
+                    "status":False
+                }
+        return response
 
 if __name__ == "__main__":
     #nos = []
