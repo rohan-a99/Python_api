@@ -85,7 +85,7 @@ def jarcheck():
     project_name=str(project_name2.replace(" ",""))
     filepathjar = 'sh '  + "simple.sh "+project_name
     try:
-        filepath =  "../workspaces/" + project_name
+        filepath =  "../workspaces/" + project_name +"/.version"
         
         
         if Path(filepath).exists(): 
@@ -175,7 +175,7 @@ def project():
         build = "chmod +x build.sh\ncd / \ncd bash-files\n./build.sh " +project + "\ncd "
         
         filepath = r"../workspaces/"
-        filepath2 = r"../workspaces/" + project + "/.versioncheck" 
+        filepath2 = r"../workspaces/" + project  
 
 
         isFile = Path(filepath2).is_dir()
