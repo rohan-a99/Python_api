@@ -85,15 +85,15 @@ def jarcheck():
     project_name=str(project_name2.replace(" ",""))
     filepathjar = 'sh '  + "simple.sh "+project_name
     try:
-        filepath =  "../workspaces/" + project_name+ "/.versioncheck"
+        filepath =  "../workspaces/" + project_name
         
         
         if Path(filepath).exists(): 
-            fileurl.save(os.path.join(app.root_path,project_name+"/libs", secure_filename("com.simplifyQA.Agent.jar")))
+            fileurl.save(os.path.join(app.root_path,"/workspaces/"+project_name+"/libs", secure_filename("com.simplifyQA.Agent.jar")))
             os.popen(filepathjar)
             resp={"status":"jar file got updated"}
         else:
-            fileurl.save(os.path.join(app.root_path,project_name+"/libs", secure_filename("com.simplifyQA.Agent.jar")))
+            fileurl.save(os.path.join(app.root_path,"/workspaces/"+project_name+"/libs", secure_filename("com.simplifyQA.Agent.jar")))
             
             os.popen(filepathjar)
             resp={"status":"jar file got updated"}
@@ -175,7 +175,7 @@ def project():
         build = "chmod +x build.sh\ncd / \ncd bash-files\n./build.sh " +project + "\ncd "
         
         filepath = r"../workspaces/"
-        filepath2 = r"../workspaces/" + project 
+        filepath2 = r"../workspaces/" + project + "/.versioncheck" 
 
 
         isFile = Path(filepath2).is_dir()
