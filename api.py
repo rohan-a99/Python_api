@@ -170,8 +170,9 @@ def project():
         id = data["id"]
 
         project=str(project1.replace(" ",""))
+	
 
-        build = "chmod +x build.sh\ncd / \ncd bash-files\n./build.sh " +project + "\ncd /\ncd "+ project
+        build = "chmod +x build.sh\ncd / \ncd bash-files\n./build.sh " +project + "\ncd "
         
         filepath = r"../workspaces/"
         filepath2 = r"../workspaces/" + project 
@@ -193,8 +194,8 @@ def project():
 
 
         else:
-            shutil.copytree("../CodeEditor", filepath)
-            shutil.move(filepath+"/CodeEditor",filepath2)
+            shutil.copytree("../CodeEditor", filepath2)
+            #shutil.move(filepath+"CodeEditor",filepath2)
 
             f = open(filepath2+"/build.sh", "w")
             f.write(build)
@@ -202,7 +203,7 @@ def project():
             
             command = "./project_creation " + project + " " + url
 
-            os.popen(command) 
+            #os.popen(command) 
 
             print("project created and pulled successfully...")
 
@@ -227,4 +228,4 @@ def project():
 
 if __name__ == "__main__":
     #nos = []
-    app.run(host ='0.0.0.0', port = 19010,debug=True)
+    app.run(host ='0.0.0.0', port = 7544,debug=True)
