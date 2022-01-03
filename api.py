@@ -173,6 +173,7 @@ def project():
 	
 
         build = "chmod +x build.sh\ncd / \ncd bash-files\n./build.sh " +project + "\ncd "
+        load  = "chmod +x load.sh\ncd / \ncd bash-files\n./dependencies.sh "+ project + "\ncd"
         
         filepath = r"../workspaces/"
         filepath2 = r"../workspaces/" + project  
@@ -199,6 +200,10 @@ def project():
 
             f = open(filepath2+"/build.sh", "w")
             f.write(build)
+            f.close()
+
+            f = open(filepath2+"/load.sh", "w")
+            f.write(load)
             f.close()
             
             command = "./project_creation " + project + " " + url
