@@ -206,9 +206,9 @@ def project():
             f.write(load)
             f.close()
             
-            command = "./project_creation " + project + " " + url
+            command = "sh "+"project_creation.sh " + project + " " + url
 
-            #os.popen(command) 
+            os.popen(command) 
 
             print("project created and pulled successfully...")
 
