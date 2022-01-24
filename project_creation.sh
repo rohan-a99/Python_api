@@ -1,8 +1,8 @@
 cd /
 cd workspaces/$1
-chmod +x workspaces/$1/load.sh
-chmod +x workspaces/$1/release.sh
-chmod +x workspaces/$1/build.sh
-chmod +x workspaces/$1/debug.sh
+chmod +x load.sh
+chmod +x release.sh
+chmod +x build.sh
+chmod +x debug.sh
 git init
 git remote add origin $2
