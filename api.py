@@ -172,7 +172,7 @@ def project():
         project=str(project1.replace(" ",""))
 	
 
-        build = "chmod +x build.sh\ncd / \ncd bash-files\n./build.sh " +project + "\ncd "
+        build = "chmod +x build.sh\nrm -rf target/classes\ncd / \ncd bash-files\n./build.sh " +project + "\ncd "
         load  = "chmod +x load.sh\ncd / \ncd bash-files\n./dependencies.sh "+ project + "\ncd"
         
         filepath = r"../workspaces/"
