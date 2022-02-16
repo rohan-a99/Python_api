@@ -32,7 +32,7 @@ def giturl():
         project1 = data["project"]
         project=str(project1.replace(" ",""))
         
-        filepath = "../workspaces/" + project+ "/giturl.txt"
+        filepath = "../giturl_details/" + project+ "_giturl.txt"
 
         #dir_list = os.listdir(filepath)
 
@@ -40,28 +40,28 @@ def giturl():
             content = open(filepath, "r")
             check_url=content.read()
             
-            filepathjar = 'sh '  + "publish.sh "+project + " " + check_url
+            # filepathjar = 'sh '  + "publish.sh "+project + " " + check_url
 
             if(check_url == fileurl):
                 resp={"status":False}
 
             else:
-                os.popen(filepathjar)
-                print("git url updated")
+                # os.popen(filepathjar)
+                
                 f = open(filepath, "w")
                 f.write(fileurl)
                 f.close()
-                
+                print("git url updated")
                 resp={"status":True}
 
         else:
-            filepathjar = 'sh '  + "publish.sh "+project + " " + fileurl
-            os.popen(filepathjar)
-            print("git url updated")
+            # filepathjar = 'sh '  + "publish.sh "+project + " " + fileurl
+            # os.popen(filepathjar)
+            # print("git url updated")
             f = open(filepath, "w+")
             f.write(fileurl)
             f.close()
-            
+            print("giturl updated")
             resp={"status":True}
         
         return resp
@@ -209,6 +209,97 @@ def versionco():
 
 @app.route('/project', methods=['POST'])
 def project():
+    print("checking if project directory present")
+
+    try:
+        project_type=""
+        data =request.get_json()
+        url = data["url"]
+        project1 = data["project"]
+        id = data["id"]
+
+        project=str(project1.replace(" ",""))
+
+        if "github" in url:
+            project_type="github"
+        if "gitlab" in url:
+            project_type="gitlab"
+        if "bitbucket" in url:
+            project_type="bigbucket"
+	
+
+        build = "chmod +x build.sh\nrm -rf target/classes\ncd / \ncd bash-files\n./build.sh " +project + "\ncd "
+        load  = "chmod +x load.sh\ncd / \ncd bash-files\n./dependencies.sh "+ project + "\ncd"
+        
+        filepath = r"../workspaces/"
+        filepath2 = r"../workspaces/" + project  
+
+
+        isFile = Path(filepath2).is_dir()
+
+
+        if isFile:
+            # f = open(filepath+"/build.sh", "w")
+            # f.write(build)
+            # f.close()
+            print("Directory already present")
+            response = {
+                    "codeeditor_url":"http:127.0.0.1:7000/#/workspaces/"+project,
+                    "status":"File Already present"
+                }
+            return response
+
+
+        else:
+
+            if "github" in url:
+                shutil.copytree("../CodeEditor_github", filepath2)
+                
+            if "gitlab" in url:
+                shutil.copytree("../CodeEditor_gitlab", filepath2)
+            
+            if "bitbucket" in url:
+                shutil.copytree("../CodeEditor_bitbucket", filepath2)
+            
+            
+            #shutil.move(filepath+"CodeEditor",filepath2)
+
+            f = open(filepath2+"/build.sh", "w")
+            f.write(build)
+            f.close()
+
+            f = open(filepath2+"/load.sh", "w")
+            f.write(load)
+            f.close()
+            
+            command = "sh "+"project_creation.sh " + project + " " + url
+
+            os.popen(command) 
+
+            print("project created and pulled successfully...")
+
+
+            response = {
+                    "codeeditor_url":"http:127.0.0.1:7000/#/workspaces/"+project,
+                    "status":"Directory created"
+                }
+
+            return response
+            
+            
+
+        
+    
+    except Exception as e:
+        print(e)
+        response = {
+                    "status":False
+                }
+        return response
+
+
+@app.route('/giturlchange', methods=['POST'])
+def gitchange():
     print("checking if project directory present")
 
     try:
