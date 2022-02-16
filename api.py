@@ -133,6 +133,54 @@ def version():
                 resp={"status":False}
 
             else:
+                # f = open(filepath, "w")
+                # f.write(target_date)
+                # f.close()
+                #fileurl.save(os.path.join(app.root_path,project_name, secure_filename("com.simplifyQA.Agent.jar")))
+                resp={"status":True}
+
+        else:
+            # f = open(filepath, "w+")
+            # f.write(target_date)
+            # f.close()
+            #fileurl.save(os.path.join(app.root_path,project_name, secure_filename("com.simplifyQA.Agent.jar")))
+            resp={"status":True}
+        
+        return resp
+    
+    
+    
+    except Exception as e:
+        print(e)
+        response = {
+                    "status":"false"
+                }
+        return response
+
+
+@app.route('/versioncopy', methods=['POST'])
+def versionco():
+    print("got jar check api request")
+
+    data = request.get_json()
+
+    project1 =data["project"]
+    target_date = data["target_date"]
+    project=str(project1.replace(" ",""))
+
+    try:
+        filepath ="../workspaces/" + project+ "/.version" 
+        
+        
+        if Path(filepath).exists(): 
+            content = open(filepath, "r")
+            check_url=content.read()
+            
+
+            if(check_url == target_date):
+                resp={"status":False}
+
+            else:
                 f = open(filepath, "w")
                 f.write(target_date)
                 f.close()
@@ -158,18 +206,26 @@ def version():
         return response
 
 
+
 @app.route('/project', methods=['POST'])
 def project():
     print("checking if project directory present")
 
     try:
-        
+        project_type=""
         data =request.get_json()
         url = data["url"]
         project1 = data["project"]
         id = data["id"]
 
         project=str(project1.replace(" ",""))
+
+        if "github" in url:
+            project_type="github"
+        if "gitlab" in url:
+            project_type="gitlab"
+        if "bitbucket" in url:
+            project_type="bigbucket"
 	
 
         build = "chmod +x build.sh\nrm -rf target/classes\ncd / \ncd bash-files\n./build.sh " +project + "\ncd "
@@ -195,7 +251,17 @@ def project():
 
 
         else:
-            shutil.copytree("../CodeEditor", filepath2)
+
+            if "github" in url:
+                shutil.copytree("../CodeEditor_github", filepath2)
+                
+            if "gitlab" in url:
+                shutil.copytree("../CodeEditor_gitlab", filepath2)
+            
+            if "bitbucket" in url:
+                shutil.copytree("../CodeEditor_bitbucket", filepath2)
+            
+            
             #shutil.move(filepath+"CodeEditor",filepath2)
 
             f = open(filepath2+"/build.sh", "w")
